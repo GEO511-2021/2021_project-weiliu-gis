@@ -27,10 +27,9 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Methods
 
-```{r}
+```{r, message=FALSE}
 # needed packages
 library(readr)
-library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
