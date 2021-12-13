@@ -27,3 +27,17 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Methods
 
+```{r}
+# needed packages
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(chron)
+library(lubridate)
+library(gganimate)
+library(viridis)
+library(GISTools)
+```
+
