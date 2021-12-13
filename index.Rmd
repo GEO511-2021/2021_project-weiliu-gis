@@ -1,5 +1,5 @@
 ---
-title: "Stay safe! Mapping the crime events in Buffalo, NY (2010-2021)"
+title: "Stay safe!\nMapping the crime events in Buffalo, NY (2010-2021)"
 author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
@@ -29,7 +29,15 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 &nbsp; &nbsp; &nbsp; &nbsp; The CBG 2010 data is downloaded from Buffalo Open Data Portal. Block Groups are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people.
 
+3. Sociodemographic data
+
+&nbsp; &nbsp; &nbsp; &nbsp; The sociodemographic data comes from the API of tidycensus.
+
 ## Methods
+
+The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create 
+
+# Process
 
 ```{r, message=FALSE, results='hide'}
 # needed packages
@@ -43,5 +51,6 @@ library(lubridate)
 library(gganimate)
 library(viridis)
 library(GISTools)
+library(tidycensus)
 ```
 
