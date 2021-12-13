@@ -21,7 +21,7 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Data
 
-1 Crime incidents  
+1. Crime incidents  
 
 &nbsp; &nbsp; &nbsp; &nbsp; The csv file of crime incidents is in the public domain, available from the website of Open Data Portal of the City of Buffalo.
 
