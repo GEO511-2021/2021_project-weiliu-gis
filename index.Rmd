@@ -1,5 +1,5 @@
 ---
-title: "Stay safe!\nMapping the crime events in Buffalo, NY (2010-2021)"
+title: "Stay safe!<br>Mapping the crime events in Buffalo, NY (2010-2021)"
 author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
@@ -35,7 +35,7 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Methods
 
-The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create 
+The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2021. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, by calculating the correlation coefficients, we reveal the probable relationship between crime incidents and sociodemographic attributes.
 
 # Process
 
