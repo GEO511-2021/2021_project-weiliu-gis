@@ -1,16 +1,32 @@
 ---
-title: "My Final Project Template"
-author: Your name here
-subtitle: Subtitle here if desired
+title: "Stay safe! Mapping the crime events in Buffalo, NY (2010-2021)"
+author: "Wei Liu"
+subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
 
 # Introduction
 
-[~ 200 words]
+Crime, as what it always appears to be, is the negative power in our society that tends to trigger multiple problems. With the increasing demand for higher quality of life in the modern world, the general public attaches more attention to the safety of the living environment as one of the basic factors considered. There has been considerable effort extended to exploring and understanding the pattern of various types of crimes. There exists a sub-field, namely, geographic profiling, which is the marginal subject of criminology and geography, looking into the crime events with both the theoretical basics from criminology and spatial methodologies from geography, with the ultimate goal of promoting suggestions for reducing crime rates and maintaining social safety.  
+  
+In this project, we want to reveal and understand the spatiotemporal distribution of crime incidents in Buffalo, New York. We are going to achieve our objective mainly by visualization of the crime incidents over time as well as over the study region. Besides, we also want to detect the relationship between crime and corresponding sociodemographic attributes in each defined area. The contribution of this project can be three-folded:  
+  
+&nbsp; &nbsp; &nbsp; &nbsp; Firstly, we analyze the pattern of crime incidents in Buffalo, NY from multiple dimensions through innovative approaches.  
+      
+&nbsp; &nbsp; &nbsp; &nbsp; Secondly, we further explore the potential mechanism behind the scene which may play a role in the formation of crime incidents.  
+      
+&nbsp; &nbsp; &nbsp; &nbsp; Thirdly, based on the aforementioned results, we are able to provide useful suggestions for promoting overall social safety.  
 
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
 
-# Materials and methods
+# Data and methods
+
+## Data
+
+1 Crime incidents  
+
+&nbsp; &nbsp; &nbsp; &nbsp; The csv file of crime incidents is in the public domain, available from the website of Open Data Portal of the City of Buffalo.
+
+## Methods
+
 
 [~ 200 words]
 
