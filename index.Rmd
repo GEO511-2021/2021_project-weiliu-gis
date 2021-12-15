@@ -76,7 +76,7 @@ crime_2010 <- crime_original %>%
   mutate(incident_datetime = parse_date_time(incident_datetime, '%m/%d/%Y %I:%M:%S %p')) %>%
   # filter by date and time (crimes recorded between 2010 and 2020)
   filter(incident_datetime >= as.POSIXct("2010-01-01 00:00:00")) %>%
-  filter(incident_datetime < as.POSIXct("2021-01-01 00:00:00")) %>%
+  filter(incident_datetime <= as.POSIXct("2020-12-31 23:59:59")) %>%
   # extract year and hour from the column of incident_datetime
   mutate(incident_year = format(incident_datetime, "%Y")) %>%
   mutate(incident_hour = format(incident_datetime, "%H")) %>%
