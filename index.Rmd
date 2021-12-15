@@ -93,6 +93,8 @@ Buffalo_CB = st_read("data/Buffalo_CB.shp")
 
 ### Sociodemographic data
 
+We use the tidycensus API to access U.S. Census data. The variables we want are population, 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hold'}
 census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
 ```
