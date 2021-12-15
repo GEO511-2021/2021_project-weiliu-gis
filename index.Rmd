@@ -58,7 +58,7 @@ library(tidycensus)
 
 - Crime incidents
 
-  - Firstly, we download the crime incidents data from Buffalo Open Data Portal。
+  - Firstly, we download the crime incidents data from Buffalo Open Data Portal.
   
 ```{r, message=FALSE, results='hide'}
 crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
