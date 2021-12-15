@@ -54,6 +54,7 @@ library(GISTools)
 library(tidycensus)
 library(sf)
 library(kableExtra)
+library(av)
 ```
 
 ## Data collection and preprocessing
@@ -202,20 +203,23 @@ ggplot() +
 
 Apparently, as the plot above shows, most crimes are committed in the middle of the night。
 
-## Change in the types of crime incidents (2010-2020)
+## Change in the ratios of the types of crime incidents (2010-2020)
 
 In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 # Firstly, we calculate the ratio (number of crimes of one type in a year / total number of crimes in that year).
 crime_by_year_type_ratio <- crime_by_year_type %>%
   group_by(incident_year) %>%
   mutate(percentage=n/sum(n))
 
 # Secondly, we do plotting.
-ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, fill=incident_year)) +
+anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, fill=incident_type_primary)) +
   geom_col() +
-  transition_time(as.numeric(incident_year)) +
-  ease_aes('linear')
+  coord_polar(theta="x") +
+  transition_states(as.numeric(incident_year), transition_length=5, state_length=1) +
+  ease_aes('linear') +
+  ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = '{closest_state}')
+animate(anim, renderer = av_renderer())
 ```
 
