@@ -23,9 +23,9 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 &nbsp; &nbsp; &nbsp; &nbsp; The csv file of crime incidents is in the public domain, available from the website of Open Data Portal of the City of Buffalo.
 
-2. Census Block 2010 of the City of Buffalo
+2. Census Block Groups (CBGs) 2010 of the City of Buffalo
 
-&nbsp; &nbsp; &nbsp; &nbsp; The Census Block 2010 data is available from Buffalo Open Data Portal. Census blocks are statistical areas bounded by visible features such as roads, streams, and railroad tracks, and by nonvisible boundaries such as property lines, city, township, school district, county limits and short line-of-sight extensions of roads.
+&nbsp; &nbsp; &nbsp; &nbsp; The Census Block Groups 2010 data is available from Buffalo Open Data Portal. CBGs are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people, and are used to present data and control block numbering. We perform our explorations at the CBG level in this project.
 
 3. Sociodemographic data
 
@@ -61,7 +61,7 @@ library(sf)
 
 Firstly, we download the crime incidents data from Buffalo Open Data Portal.
   
-```{r, message=FALSE, results='hide'}
+```{r, message=FALSE, warning=FALSE, results='hide'}
 crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
 ```
 
@@ -99,7 +99,6 @@ We use the tidycensus API to access U.S. Census data. The variables that we use 
 census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
 ```
 
-
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 population <- get_acs(geography = "block group", state="NY", county="Erie",
                       variables = "B01003_001",
@@ -126,3 +125,4 @@ bachelor <- get_acs(geography = "block group", state="NY", county="Erie",
                     year=2019)
 ```
 
+Then we organize the variables together and join them with the CBG data.
