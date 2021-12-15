@@ -122,7 +122,7 @@ bachelor = rename(bachelor, c("bachelor"= "estimate"))
 ```
 Then, we organize the sociodemographic data together with the CBG data.
 
-```{r}
+```{r, message=FALSE, warning=FALSE, results='hide'}
 # left join
 Buffalo_demo <- Buffalo_CBG %>%
   left_join(population, by = c("geoid10" = "GEOID")) %>%
@@ -137,3 +137,4 @@ Buffalo_demo <- dplyr::select(Buffalo_demo, geoid10, population, black, white, a
 ```
 
 And to remove the effect of population disparity, we normalize some of our variables by population.
+
