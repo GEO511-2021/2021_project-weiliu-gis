@@ -200,3 +200,22 @@ ggplot() +
   theme_minimal()
 ```
 
+Apparently, as the plot above shows, most crimes are committed in the middle of the night。
+
+## Change in the types of crime incidents (2010-2020)
+
+In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
+
+```{r, message=FALSE, warning=FALSE}
+# Firstly, we calculate the ratio (number of crimes of one type in a year / total number of crimes in that year).
+crime_by_year_type_ratio <- crime_by_year_type %>%
+  group_by(incident_year) %>%
+  mutate(percentage=n/sum(n))
+
+# Secondly, we do plotting.
+ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, fill=incident_year)) +
+  geom_col() +
+  transition_time(as.numeric(incident_year)) +
+  ease_aes('linear')
+```
+
