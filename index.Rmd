@@ -196,8 +196,8 @@ ggplot() +
   labs(title = "Number of Crime Incidents by Hour",
        x = "Hour of a day",
        y = "Total Number of Incidents") +
-  theme(plot.title = element_text(hjust = 0.5), ) +
   scale_fill_viridis(discrete=TRUE, name="Incident Type") +
+  theme(plot.title = element_text(hjust = 0.5)) +
   theme_minimal()
 ```
 
@@ -217,10 +217,11 @@ crime_by_year_type_ratio <- crime_by_year_type %>%
 anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, fill=incident_type_primary)) +
   geom_col() +
   coord_polar(theta="x") +
+  theme(plot.title = element_text(hjust = 0.5)) +
   theme_minimal() +
   transition_states(as.numeric(incident_year), transition_length=5, state_length=1) +
   ease_aes('linear') +
-  ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = '{closest_state}')
+  ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = 'Year: {closest_state}')
 animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
