@@ -97,7 +97,7 @@ Buffalo_CBG <- dplyr::select(Buffalo_CBG, geoid10)
 
 We use the tidycensus API to access U.S. Census data. The variables that we use in this project are population, black population, white population, population aged 65 and over, median household income, and population with Bachelor's degree.
 
-```{r, message=FALSE, warning=FALSE, results='hold'}
+```{r, include=FALSE}
 census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
 ```
 
