@@ -171,3 +171,4 @@ ggplot() +
   scale_fill_viridis(discrete=TRUE, name="Incident Type")
 ```
 
+From the plot above, obviously, it deomonstrates that the number of crime incidents has been decreasing through the period of time.
