@@ -91,3 +91,14 @@ We read the file of Census Block into the environment.
 Buffalo_CB = st_read("data/Buffalo_CB.shp")
 ```
 
+### Sociodemographic data
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hold'}
+census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
+```
+
+
+```{r, message=FALSE, results='hide'}
+
+```
+
