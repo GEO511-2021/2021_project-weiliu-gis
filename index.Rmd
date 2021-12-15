@@ -227,3 +227,4 @@ animate(anim, renderer = magick_renderer(loop=TRUE))
 
 From the dynamic plot, we notice that the three leading types of crime are larceny/theft, burglary, and assault. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and burglary.
 
+## Total Number of Crime Incidents (2010-2020)
