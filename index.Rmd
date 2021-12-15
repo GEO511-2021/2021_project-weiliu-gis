@@ -52,6 +52,7 @@ library(gganimate)
 library(viridis)
 library(GISTools)
 library(tidycensus)
+library(sf)
 ```
 
 ## Data collection and preprocessing
@@ -83,4 +84,11 @@ crime_2010 <- crime_original %>%
   drop_na(latitude)
 ```
 
-### Crime incidents
+### Census Block 2010
+
+We read the file of Census Block into the environment.
+
+```{r, message=FALSE, results='hide'}
+Buffalo_CB = st_read("data/Buffalo_CB.shp")
+```
+
