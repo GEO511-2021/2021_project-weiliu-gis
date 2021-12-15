@@ -67,19 +67,18 @@ crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.c
 
 secondly, we preprocess the crime incidents data.
 ```{r, message=FALSE, results='hide'}
-crime_2010 <- crime_original %>%
+crime_pre <- crime_original %>%
   # For the column of incident_type_primary, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
   mutate(incident_type_primary = tolower(incident_type_primary)) %>%
   # the column of incident_datetime has 5 NA, so we fill them with the values in the column of create_at respectively.
   mutate(incident_datetime = ifelse(is.na(incident_datetime), created_at, incident_datetime)) %>%
   # change the column of incident_datetime into a standard date-time format.
   mutate(incident_datetime = parse_date_time(incident_datetime, '%m/%d/%Y %I:%M:%S %p')) %>%
-  # filter by date and time (crimes recorded between 2010 and 2020)
-  filter(incident_datetime >= as.POSIXct("2010-01-01 00:00:00")) %>%
-  filter(incident_datetime <= as.POSIXct("2020-12-31 23:59:59")) %>%
   # extract year and hour from the column of incident_datetime
   mutate(incident_year = format(incident_datetime, "%Y")) %>%
   mutate(incident_hour = format(incident_datetime, "%H")) %>%
+  # filter by date and time (crimes recorded between 2010 and 2020)
+  filter(incident_year >= 2010 & incident_year <= 2020) %>%
   # drop those records that do not contain the coordinate information
   drop_na(latitude)
 ```
