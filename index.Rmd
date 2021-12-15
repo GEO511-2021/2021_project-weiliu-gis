@@ -53,6 +53,7 @@ library(viridis)
 library(GISTools)
 library(tidycensus)
 library(sf)
+library(kableExtra)
 ```
 
 ## Data collection and preprocessing
@@ -99,6 +100,9 @@ We use the tidycensus API to access U.S. Census data. The variables that we use 
 
 ```{r, include=FALSE}
 census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
+
+census_api_key(Sys.getenv("CENSUS_API_KEY"),install=TRUE, overwrite = TRUE)
+readRenviron("~/.Renviron")
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
