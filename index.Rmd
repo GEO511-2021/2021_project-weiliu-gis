@@ -145,3 +145,29 @@ Buffalo_demo <- Buffalo_demo %>%
   mutate(aged_r = aged / population) %>%
   mutate(bachelor_r = bachelor / population)
 ```
+
+# Results
+
+## Total Number of Crime Incidents (2010-2020)
+
+In this part, we create a image to show the change in the total number of crime incidents from 2010 to 2020 and also use distinct colors to mark out different type of crimes.
+
+```{r}
+crime_by_year <- count(crime_pre, incident_year) %>%
+  arrange(incident_year)
+
+crime_by_year_type <- count(crime_pre, incident_year, incident_type_primary) %>%
+  arrange(incident_year)
+
+ggplot() +
+  geom_col(data=crime_by_year_type, mapping=aes(incident_year, n, fill=incident_type_primary, group = 1)) +
+  geom_line(data=crime_by_year, aes(incident_year, n, group = 1)) +
+  geom_point(data=crime_by_year, aes(incident_year, n, group = 1)) +
+  geom_text_repel(data=crime_by_year, aes(incident_year, n, group = 1, label=n), size=3, fontface="bold", color="darkred", hjust = 0.65, vjust = 0.6) +
+  labs(title = "Total Number of Crime Incidents (2010-2020)",
+       x = "Year",
+       y = "Total Number of Incidents") +
+  theme(plot.title = element_text(hjust = 0.5), ) +
+  scale_fill_viridis(discrete=TRUE, name="Incident Type")
+```
+
