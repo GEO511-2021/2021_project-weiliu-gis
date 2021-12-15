@@ -33,7 +33,7 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Methods
 
-The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2020. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, using data in 2019 as an example, we reveal the probable relationship between crime incidents and sociodemographic attributes by calculating the correlation coefficients.
+The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2020. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, using data in the year of 2019 as an example, we reveal the probable relationship between crime incidents and sociodemographic attributes by calculating the correlation coefficients.
 
 # Process
 
@@ -103,26 +103,34 @@ census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwri
 population <- get_acs(geography = "block group", state="NY", county="Erie",
                       variables = "B01003_001",
                       year=2019)
+population = rename(population, c("population"= "estimate"))
 
-Black <- get_acs(geography = "block group", state="NY", county="Erie",
-                 variables = "B02001_003",
-                 year=2019)
+black <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B02001_003", year=2019)
+black = rename(black, c("black"= "estimate"))
 
-White <- get_acs(geography = "block group", state="NY", county="Erie",
-                 variables = "B02001_002",
-                 year=2019)
+white <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B02001_002", year=2019)
+white = rename(white, c("white"= "estimate"))
 
-aged <- get_acs(geography = "block group", state="NY", county="Erie",
-                variables = "B29001_005",
-                year=2019)
+aged <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B29001_005", year=2019)
+aged = rename(aged, c("aged"= "estimate"))
 
-income <- get_acs(geography = "block group", state="NY", county="Erie",
-                  variables = "B19013_001",
-                  year=2019)
+income <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B19013_001", year=2019)
+income = rename(income, c("income"= "estimate"))
 
-bachelor <- get_acs(geography = "block group", state="NY", county="Erie",
-                    variables = "B15012_001",
-                    year=2019)
+bachelor <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B15012_001", year=2019)
+bachelor = rename(bachelor, c("bachelor"= "estimate"))
+```
+Then, we organize the sociodemographic data together with the CBG data.
+
+```{r}
+Buffalo_demo <- Buffalo_CBG %>%
+  left_join(population, by = c("geoid10" = "GEOID")) %>%
+  left_join(black, by = c("geoid10" = "GEOID")) %>%
+  left_join(white, by = c("geoid10" = "GEOID")) %>%
+  left_join(aged, by = c("geoid10" = "GEOID")) %>%
+  left_join(income, by = c("geoid10" = "GEOID")) %>%
+  left_join(bachelor, by = c("geoid10" = "GEOID")) %>%
+  select(GEOID, population, black, white, aged, income, bachelor, geometry)
 ```
 
-Then we organize the variables together and join them with the CBG data.
+ And to remove the effect of population disparity, we normalize some of our variables by population.
