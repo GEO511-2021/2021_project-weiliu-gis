@@ -83,24 +83,46 @@ crime_pre <- crime_original %>%
   drop_na(latitude)
 ```
 
-### Census Block 2010
+### Census Block Group 2010
 
-We read the file of Census Block into the environment.
+We read the file of Census Block Group into the environment.
 
 ```{r, message=FALSE, results='hide'}
-Buffalo_CB = st_read("data/Buffalo_CB.shp")
+Buffalo_CBG = st_read("data/buffalo_cbg.shp")
 ```
 
 ### Sociodemographic data
 
-We use the tidycensus API to access U.S. Census data. The variables we want are population, 
+We use the tidycensus API to access U.S. Census data. The variables that we use in this project are population, black population, white population, population aged 65 and over, median household income, and population with Bachelor's degree.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hold'}
 census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
 ```
 
 
-```{r, message=FALSE, results='hide'}
+```{r, message=FALSE, warning=FALSE, results='hide'}
+population <- get_acs(geography = "block group", state="NY", county="Erie",
+                      variables = "B01003_001",
+                      year=2019)
 
+Black <- get_acs(geography = "block group", state="NY", county="Erie",
+                 variables = "B02001_003",
+                 year=2019)
+
+White <- get_acs(geography = "block group", state="NY", county="Erie",
+                 variables = "B02001_002",
+                 year=2019)
+
+aged <- get_acs(geography = "block group", state="NY", county="Erie",
+                variables = "B29001_005",
+                year=2019)
+
+income <- get_acs(geography = "block group", state="NY", county="Erie",
+                  variables = "B19013_001",
+                  year=2019)
+
+bachelor <- get_acs(geography = "block group", state="NY", county="Erie",
+                    variables = "B15012_001",
+                    year=2019)
 ```
 
