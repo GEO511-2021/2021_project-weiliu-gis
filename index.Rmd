@@ -156,7 +156,7 @@ Buffalo_demo <- Buffalo_demo %>%
 
 In this part, we create a image to show the change in the total number of crime incidents from 2010 to 2020 and also use distinct colors to mark out different type of crimes.
 
-```{r}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 crime_by_year <- count(crime_pre, incident_year) %>%
   arrange(incident_year)
 
@@ -181,7 +181,7 @@ From the plot above, obviously, it deomonstrates that the number of crime incide
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 crime_by_hour <- count(crime_pre, incident_hour) %>%
   arrange(incident_hour)
 
