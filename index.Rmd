@@ -138,3 +138,10 @@ Buffalo_demo <- dplyr::select(Buffalo_demo, geoid10, population, black, white, a
 
 And to remove the effect of population disparity, we normalize some of our variables by population.
 
+```{r, message=FALSE, warning=FALSE, results='hide'}
+Buffalo_demo <- Buffalo_demo %>%
+  mutate(black_r = black / population) %>%
+  mutate(white_r = white / population) %>%
+  mutate(aged_r = aged / population) %>%
+  mutate(bachelor_r = bachelor / population)
+```
