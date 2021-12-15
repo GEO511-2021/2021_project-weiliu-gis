@@ -1,5 +1,5 @@
 ---
-title: "Stay safe!<br>Mapping the crime events in Buffalo, NY (2010-2021)"
+title: "Stay safe!<br>Mapping the crime events in Buffalo, NY (2010-2020)"
 author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
@@ -23,9 +23,9 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 &nbsp; &nbsp; &nbsp; &nbsp; The csv file of crime incidents is in the public domain, available from the website of Open Data Portal of the City of Buffalo.
 
-2. Census Block Groups (CBG) 2010 of the City of Buffalo
+2. Census Block 2010 of the City of Buffalo
 
-&nbsp; &nbsp; &nbsp; &nbsp; The CBG 2010 data is downloaded from Buffalo Open Data Portal. Block Groups are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people.
+&nbsp; &nbsp; &nbsp; &nbsp; The Census Block 2010 data is available from Buffalo Open Data Portal. Census blocks are statistical areas bounded by visible features such as roads, streams, and railroad tracks, and by nonvisible boundaries such as property lines, city, township, school district, county limits and short line-of-sight extensions of roads.
 
 3. Sociodemographic data
 
@@ -33,11 +33,11 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## Methods
 
-The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2021. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, by calculating the correlation coefficients, we reveal the probable relationship between crime incidents and sociodemographic attributes.
+The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2020. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, using data in 2019 as an example, we reveal the probable relationship between crime incidents and sociodemographic attributes by calculating the correlation coefficients.
 
 # Process
 
-## Load needed packages for the project
+## Load needed packages
 
 ```{r, message=FALSE, results='hide'}
 # needed packages
@@ -54,7 +54,7 @@ library(GISTools)
 library(tidycensus)
 ```
 
-## Download and prepare the data
+## Data collection and preprocessing
 
 ### Crime incidents
 
@@ -73,8 +73,9 @@ crime_2010 <- crime_original %>%
   mutate(incident_datetime = ifelse(is.na(incident_datetime), created_at, incident_datetime)) %>%
   # change the column of incident_datetime into a standard date-time format.
   mutate(incident_datetime = parse_date_time(incident_datetime, '%m/%d/%Y %I:%M:%S %p')) %>%
-  # filter by date and time (crimes recorded on or later than 2010-01-01 00:00:00)
+  # filter by date and time (crimes recorded between 2010 and 2020)
   filter(incident_datetime >= as.POSIXct("2010-01-01 00:00:00")) %>%
+  filter(incident_datetime < as.POSIXct("2021-01-01 00:00:00")) %>%
   # extract year and hour from the column of incident_datetime
   mutate(incident_year = format(incident_datetime, "%Y")) %>%
   mutate(incident_hour = format(incident_datetime, "%H")) %>%
@@ -82,3 +83,4 @@ crime_2010 <- crime_original %>%
   drop_na(latitude)
 ```
 
+### Crime incidents
