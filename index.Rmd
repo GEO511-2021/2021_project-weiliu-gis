@@ -42,15 +42,16 @@ The major method utilized in this project is visualization. And the visualizatio
 ```{r, message=FALSE, results='hide'}
 # needed packages
 library(readr)
+library(chron)
+library(lubridate)
+library(tidycensus)
 library(tidyverse)
 library(viridis)
 library(ggrepel)
 library(ggcorrplot)
-library(chron)
-library(lubridate)
 library(gganimate)
-library(tidycensus)
 library(sf)
+library(leaflet)
 library(GISTools)
 library(kableExtra)
 library(magick)
@@ -227,4 +228,21 @@ animate(anim, renderer = magick_renderer(loop=TRUE))
 
 From the dynamic plot, we notice that the three leading types of crime are larceny/theft, burglary, and assault. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and burglary.
 
-## Total Number of Crime Incidents (2010-2020)
+## Spatial distribution of the crime incidents in 2019
+
+
+
+```{r}
+crime_2019 <- crime_pre %>%
+  filter(incident_year=="2019")
+
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers(lng = crime_2019$longitude, 
+                   lat = crime_2019$latitude,
+                   radius = 2,
+                   popup = paste0("Crime Type: ", crime_2019$incident_type_primary,"<br>",
+                                  "Address: ", crime_2019$address),
+                   clusterOptions = markerClusterOptions())
+```
+
