@@ -43,16 +43,15 @@ The major method utilized in this project is visualization. And the visualizatio
 # needed packages
 library(readr)
 library(tidyverse)
-library(dplyr)
-library(ggplot2)
+library(viridis)
 library(ggrepel)
+library(ggcorrplot)
 library(chron)
 library(lubridate)
 library(gganimate)
-library(viridis)
-library(GISTools)
 library(tidycensus)
 library(sf)
+library(GISTools)
 library(kableExtra)
 library(magick)
 ```
@@ -225,4 +224,6 @@ anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, 
   ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = 'Year: {closest_state}')
 animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
+
+From the dynamic plot, we notice that the three leading types of crime are larceny/theft, burglary, and assault. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and burglary.
 
