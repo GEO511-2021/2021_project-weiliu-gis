@@ -54,7 +54,7 @@ library(GISTools)
 library(tidycensus)
 library(sf)
 library(kableExtra)
-library(av)
+library(magick)
 ```
 
 ## Data collection and preprocessing
