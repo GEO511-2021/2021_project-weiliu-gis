@@ -37,6 +37,8 @@ The major method utilized in this project is visualization. And the visualizatio
 
 # Process
 
+## Load needed packages for the project
+
 ```{r, message=FALSE, results='hide'}
 # needed packages
 library(readr)
@@ -50,5 +52,29 @@ library(gganimate)
 library(viridis)
 library(GISTools)
 library(tidycensus)
+```
+
+## Download and prepare the data
+
+- Crime incidents
+
+```{r}
+# Read the csv file of crime events form Buffalo Open Data Portal
+crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
+
+crime_2010 <- crime_original %>%
+  # For the column of incident_type_primary, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
+  mutate(incident_type_primary = tolower(incident_type_primary)) %>%
+  # the column of incident_datetime has 5 NA, so we fill them with the values in the column of create_at respectively.
+  mutate(incident_datetime = ifelse(is.na(incident_datetime), created_at, incident_datetime)) %>%
+  # change the column of incident_datetime into a standard date-time format.
+  mutate(incident_datetime = parse_date_time(incident_datetime, '%m/%d/%Y %I:%M:%S %p')) %>%
+  # filter by date and time (crimes recorded on or later than 2010-01-01 00:00:00)
+  filter(incident_datetime >= as.POSIXct("2010-01-01 00:00:00")) %>%
+  # extract year and hour from the column of incident_datetime
+  mutate(incident_year = format(incident_datetime, "%Y")) %>%
+  mutate(incident_hour = format(incident_datetime, "%H")) %>%
+  # drop those records that do not contain the coordinate information
+  drop_na(latitude)
 ```
 
