@@ -218,6 +218,7 @@ anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, 
   geom_col() +
   coord_polar(theta="x") +
   theme_minimal() +
+  labs(x = "Incident Type", y = "Percentage") +
   theme(plot.title = element_text(hjust = 0.5)) +
   transition_states(as.numeric(incident_year), transition_length=5, state_length=1) +
   ease_aes('linear') +
