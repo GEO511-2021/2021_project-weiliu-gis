@@ -58,10 +58,14 @@ library(tidycensus)
 
 - Crime incidents
 
-```{r}
-# Read the csv file of crime events form Buffalo Open Data Portal
+  - Firstly, we download the crime incidents data from Buffalo Open Data Portal。
+  
+```{r, message=FALSE, results='hide'}
 crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
+```
 
+  - secondly, we preprocess the crime incidents data.
+```{r, message=FALSE, results='hide'}
 crime_2010 <- crime_original %>%
   # For the column of incident_type_primary, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
   mutate(incident_type_primary = tolower(incident_type_primary)) %>%
