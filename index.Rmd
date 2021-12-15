@@ -220,6 +220,6 @@ anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, 
   transition_states(as.numeric(incident_year), transition_length=5, state_length=1) +
   ease_aes('linear') +
   ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = '{closest_state}')
-animate(anim, renderer = av_renderer())
+animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
