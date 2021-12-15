@@ -177,7 +177,9 @@ ggplot() +
 
 From the plot above, obviously, it deomonstrates that the number of crime incidents has been decreasing through the period of time.
 
+## Number of Crime Incidents by Hour
 
+In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
 ```{r, message=FALSE, warning=FALSE}
 crime_by_hour <- count(crime_pre, incident_hour) %>%
@@ -190,7 +192,7 @@ ggplot() +
   geom_col(data=crime_by_hour_type, mapping=aes(incident_hour, n, fill=incident_type_primary, group = 1)) +
   coord_polar(theta="x") +
   geom_text_repel(data=crime_by_hour, aes(incident_hour, n, group = 1, label=n), size=2, fontface="bold", color="darkred") +
-  labs(title = "Total Number of Crime Incidents by Hour",
+  labs(title = "Number of Crime Incidents by Hour",
        x = "Hour of a day",
        y = "Total Number of Incidents") +
   theme(plot.title = element_text(hjust = 0.5), ) +
