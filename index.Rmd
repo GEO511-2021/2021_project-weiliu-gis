@@ -168,7 +168,9 @@ Buffalo_demo <- Buffalo_demo %>%
 
 # Results
 
-## Total Number of Crime Incidents (2010-2020)
+## The Distribution of Crimes in Space and Time
+
+### Total Number of Crime Incidents (2010-2020)
 
 In this part, we create a image to show the change in the total number of crime incidents from 2010 to 2020 and also use distinct colors to mark out different type of crimes.
 
@@ -195,7 +197,7 @@ ggplot() +
 
 From the plot above, obviously, it demonstrates that the number of crime incidents has been decreasing through the period of time.
 
-## Number of Crime Incidents by Hour
+### Number of Crime Incidents by Hour
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
@@ -220,7 +222,7 @@ ggplot() +
 
 Apparently, as the plot above shows, most crimes are committed in the middle of the night。
 
-## Change in the ratios of the types of crime incidents (2010-2020)
+### Change in the ratios of the types of crime incidents (2010-2020)
 
 In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
 
@@ -245,7 +247,7 @@ animate(anim, renderer = magick_renderer(loop=TRUE))
 
 From the dynamic plot, we notice that the three leading types of crime are theft, assault, and breaking&entering. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and breaking&entering.
 
-## Spatial distribution of the crime incidents in 2019
+### Spatial distribution of the crime incidents in 2019
 
 In this part, we create an interactive map showing the spatial distribution of crime incidents in 2019.
 
@@ -270,3 +272,4 @@ leaflet(crime_2019) %>%
   addPolygons(data = Buffalo_CBG$geometry, color = "black", weight = 0.5)
 ```
 
+Intuitively, from the map, we are aware that most crime incidents happen within or near the central part of Buffalo.
