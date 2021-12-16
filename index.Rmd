@@ -4,6 +4,10 @@ author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
 
+<br>
+<br>
+<br>
+
 # 1 Introduction
 
 Crime, as what it always appears to be, is the negative power in our society that tends to trigger multiple problems. With the increasing demand for higher quality of life in the modern world, the general public attaches more attention to the safety of the living environment as one of the basic factors considered. There has been considerable effort extended to exploring and understanding the pattern of various types of crimes. There exists a sub-field, namely, geographic profiling, which is the marginal subject of criminology and geography, looking into the crime events with both the theoretical basics from criminology and spatial methodologies from geography, with the ultimate goal of promoting suggestions for reducing crime rates and maintaining social safety.  
