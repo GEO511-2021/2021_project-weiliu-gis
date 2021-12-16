@@ -309,8 +309,9 @@ crime_2019_count_by_CBG <- crime_2019 %>%
   group_by(geoid10) %>%
   summarize(counts = n()) %>%
   # Join the counts to Buffalo_CBG
-  right_join(Buffalo_CBG, by = "geoid10") %>%
-  st_set_geometry(crime_2019_count_by_CBG$geometry)
+  right_join(Buffalo_CBG, by = "geoid10")
+
+crime_2019_count_by_CBG <- st_set_geometry(crime_2019_count_by_CBG, crime_2019_count_by_CBG$geometry)
 ```
 
 ```{r, message=FALSE, fig.align='center'}
@@ -335,3 +336,16 @@ leaflet() %>%
 
 ## Correlation Between Crime Incidents and Sociodemographic Characteristics
 
+In this part, we explore the correlation between recorded crime incidents and sociodemographic characteristics in the same areas, taking the year of 2019 as an example.
+
+```{r, message=FALSE}
+# join the preprocessed demographic data with the crime data of 2019
+Buffalo_demo_crime <- Buffalo_demo %>%
+  st_set_geometry(NULL) %>%
+  inner_join(crime_2019_count_by_CBG, by='geoid10') %>%
+  st_as_sf()
+```
+
+```{r, message=FALSE}
+# 
+```
