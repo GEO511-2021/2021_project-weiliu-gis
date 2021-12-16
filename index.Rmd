@@ -220,7 +220,7 @@ From the plot above, obviously, it demonstrates that the number of crime inciden
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
-```{r, message=FALSE, warning=FALSE, fig.align='center'}
+```{r, message=FALSE, warning=FALSE, fig.align='center', fig.width=10}
 crime_by_hour <- count(crime_pre_drop_geo, incident_hour) %>%
   arrange(incident_hour)
 
@@ -247,7 +247,7 @@ Apparently, as the plot above shows, most crimes are committed in the middle of 
 
 In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
 
-```{r, message=FALSE, warning=FALSE, fig.align='center'}
+```{r, message=FALSE, warning=FALSE, fig.align='center', fig.width=10}
 # Firstly, we calculate the ratio (number of crimes of one type in a year / total number of crimes in that year).
 crime_by_year_type_ratio <- crime_by_year_type %>%
   group_by(incident_year) %>%
