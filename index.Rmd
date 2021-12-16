@@ -116,7 +116,7 @@ crime_pre <- st_as_sf(crime_pre) %>%
 
 # Only select needed columns
 crime_pre <- dplyr::select(crime_pre,
-                    geoid10, incident_datetime, incident_year, incident_hour, parent_incident_type)
+                           case_number, geoid10, incident_datetime, incident_year, incident_hour, parent_incident_type)
 ```
 
 <br>
@@ -266,7 +266,7 @@ From the dynamic plot, we notice that the three leading types of crime are theft
 
 <br>
 
-### Spatial distribution of the crime incidents in 2019
+### Map of the Spatial distribution of the crime incident points (2019)
 
 In this part, we create an interactive map showing the spatial distribution of crime incidents in 2019.
 
@@ -283,16 +283,50 @@ Buffalo_CBG <- st_transform(Buffalo_CBG, '+proj=longlat +datum=WGS84')
 ```{r, message=FALSE, fig.align='center'}
 leaflet(crime_2019) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addCircleMarkers(radius = 1, clusterOptions = markerClusterOptions(),
+  addCircleMarkers(radius = 1,
+                   clusterOptions = markerClusterOptions(),
                    popup = paste0("Crime Type: ", crime_2019$parent_incident_type,
                                   "<br>",
                                   "Date & Time: ", crime_2019$incident_datetime),
                    popupOptions = popupOptions(closeButton=FALSE, closeOnClick=TRUE)) %>%
-  addPolygons(data = Buffalo_CBG$geometry, color = "black", weight = 0.5)
+  addPolygons(data = Buffalo_CBG$geometry,
+              color = "black",
+              weight = 0.5)
 ```
 
 Intuitively, from the map, we are aware that most crime incidents happen within or near the central part of Buffalo.
 
 <br>
 
-## 
+### Map of the Spatial distribution of the crime incidents by Census Block Group (2019)
+
+In this part, we count the number of crime incidents in each Census Block Group and display the map.
+
+```{r, results='hide'}
+# Count by CBGs
+crime_2019_count_by_CBG <- crime_2019 %>%
+  st_set_geometry(NULL) %>%
+  group_by(geoid10) %>%
+  summarize(counts = n()) %>%
+  # Join the counts to Buffalo_CBG
+  right_join(Buffalo_CBG, by = "geoid10") %>%
+  st_set_geometry(crime_2019_count_by_CBG$geometry)
+```
+
+```{r, message=FALSE, fig.align='center'}
+pal <- colorNumeric(c('#edf8fb','#b3cde3','#8c96c6','#8856a7','#810f7c'), crime_2019_count_by_CBG$counts)
+
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addPolygons(data = crime_2019_count_by_CBG$geometry,
+              color = "black",
+              weight = 0.5,
+              popup = paste0("Number of Incidents: ", crime_2019_count_by_CBG$counts),
+              fillColor = pal(crime_2019_count_by_CBG$counts),
+              fillOpacity = 0.8,
+              highlightOptions = highlightOptions(color = "black",
+                                                  weight = 3)) %>%
+  addLegend(pal = pal, 
+            values = crime_2019_count_by_CBG$counts,
+            opacity = 1)
+```
