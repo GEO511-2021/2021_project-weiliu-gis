@@ -330,3 +330,8 @@ leaflet() %>%
             values = crime_2019_count_by_CBG$counts,
             opacity = 1)
 ```
+
+<br>
+
+## Correlation Between Crime Incidents and Sociodemographic Characteristics
+
