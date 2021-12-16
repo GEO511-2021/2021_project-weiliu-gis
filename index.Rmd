@@ -55,10 +55,10 @@ library(viridis)
 library(ggrepel)
 library(gganimate)
 library(magick)
+library(ggcorrplot)
 library(sf)
 library(spatialEco)
 library(leaflet)
-library(GISTools)
 library(kableExtra)
 library(ggcorrplot)
 ```
@@ -343,9 +343,23 @@ In this part, we explore the correlation between recorded crime incidents and so
 Buffalo_demo_crime <- Buffalo_demo %>%
   st_set_geometry(NULL) %>%
   inner_join(crime_2019_count_by_CBG, by='geoid10') %>%
-  st_as_sf()
+  dplyr::select(black_r, white_r, aged_r, bachelor_r, income, population, counts) %>%
+  # There are some missing values in the data frame
+  drop_na()
 ```
 
 ```{r, message=FALSE}
-# 
+# Calculate the correlation matrix
+corr <- cor(Buffalo_demo_crime)
+# Calculate the correlation p-values
+pmat <- cor_pmat(Buffalo_demo_crime)
+
+# Plot the correlation matrix
+ggcorrplot(corr,
+           method = "circle",
+           hc.order = TRUE,
+           type = "lower",
+           outline.color = "gray50",
+           ggtheme = ggplot2::theme_minimal,
+           p.mat = pmat)
 ```
