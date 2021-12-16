@@ -14,6 +14,7 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 &nbsp; &nbsp; &nbsp; &nbsp; Secondly, we further explore the potential mechanism behind the scene which may play a role in the formation of crime incidents.<br>
 &nbsp; &nbsp; &nbsp; &nbsp; Thirdly, based on the aforementioned results, we are able to provide useful suggestions for promoting overall social safety.<br>
 
+<br>
 
 # Data and methods
 
@@ -31,9 +32,13 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 &nbsp; &nbsp; &nbsp; &nbsp; The sociodemographic data comes from the API of tidycensus.
 
+<br>
+
 ## Methods
 
 The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2020. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, using data in the year of 2019 as an example, we reveal the probable relationship between crime incidents and sociodemographic attributes by calculating the correlation coefficients.
+
+<br>
 
 # Process
 
@@ -58,6 +63,8 @@ library(kableExtra)
 library(ggcorrplot)
 ```
 
+<br>
+
 ## Data collection and preprocessing
 
 ### Census Block Group 2010
@@ -70,6 +77,8 @@ Buffalo_CBG = st_read("data/buffalo_cbg.shp")
 Buffalo_CBG <- dplyr::select(Buffalo_CBG, geoid10)
 ```
 
+<br>
+
 ### Crime incidents
 
 Firstly, we download the crime incidents data from Buffalo Open Data Portal.
@@ -78,7 +87,7 @@ Firstly, we download the crime incidents data from Buffalo Open Data Portal.
 crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
 ```
 
-secondly, we preprocess the crime incidents data.
+secondly, we clean and preprocess the original crime incidents data.
 ```{r, message=FALSE, results='hide'}
 crime_pre <- crime_original %>%
   # For the column of parent_incident_type, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
@@ -109,6 +118,8 @@ crime_pre <- st_as_sf(crime_pre) %>%
 crime_pre <- dplyr::select(crime_pre,
                     geoid10, incident_datetime, incident_year, incident_hour, parent_incident_type)
 ```
+
+<br>
 
 ### Sociodemographic data
 
@@ -166,6 +177,8 @@ Buffalo_demo <- Buffalo_demo %>%
   mutate(bachelor_r = bachelor / population)
 ```
 
+<br>
+
 # Results
 
 ## The Distribution of Crimes in Space and Time
@@ -197,6 +210,8 @@ ggplot() +
 
 From the plot above, obviously, it demonstrates that the number of crime incidents has been decreasing through the period of time.
 
+<br>
+
 ### Number of Crime Incidents by Hour
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
@@ -222,6 +237,8 @@ ggplot() +
 
 Apparently, as the plot above shows, most crimes are committed in the middle of the night。
 
+<br>
+
 ### Change in the ratios of the types of crime incidents (2010-2020)
 
 In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
@@ -246,6 +263,8 @@ animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
 From the dynamic plot, we notice that the three leading types of crime are theft, assault, and breaking&entering. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and breaking&entering.
+
+<br>
 
 ### Spatial distribution of the crime incidents in 2019
 
@@ -273,3 +292,7 @@ leaflet(crime_2019) %>%
 ```
 
 Intuitively, from the map, we are aware that most crime incidents happen within or near the central part of Buffalo.
+
+<br>
+
+## 
