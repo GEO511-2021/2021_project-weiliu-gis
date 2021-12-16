@@ -247,17 +247,19 @@ From the dynamic plot, we notice that the three leading types of crime are theft
 
 ## Spatial distribution of the crime incidents in 2019
 
-
+In this part, we create an interactive map showing the spatial distribution of crime incidents in 2019.
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
+# Filter the data for the year of 2019
 crime_2019 <- crime_pre %>%
   filter(incident_year=="2019")
 
-st_transform(crime_2019, '+proj=longlat +datum=WGS84')
-st_transform(Buffalo_CBG, '+proj=longlat +datum=WGS84')
+# transform the the layers' projection to fit the coordinate system of leaflet map
+crime_2019 <- st_transform(crime_2019, '+proj=longlat +datum=WGS84')
+Buffalo_CBG <- st_transform(Buffalo_CBG, '+proj=longlat +datum=WGS84')
 ```
 
-```{r, message=FALSE, warning=FALSE, fig.align='center'}
+```{r, message=FALSE, fig.align='center'}
 leaflet(crime_2019) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(radius = 1, clusterOptions = markerClusterOptions(),
@@ -266,6 +268,5 @@ leaflet(crime_2019) %>%
                                   "Date & Time: ", crime_2019$incident_datetime),
                    popupOptions = popupOptions(closeButton=FALSE, closeOnClick=TRUE)) %>%
   addPolygons(data = Buffalo_CBG$geometry, color = "black", weight = 0.5)
-  
 ```
 
