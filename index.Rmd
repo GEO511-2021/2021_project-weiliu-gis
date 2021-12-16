@@ -258,7 +258,11 @@ st_transform(Buffalo_CBG, '+proj=longlat +datum=WGS84')
 
 leaflet(crime_2019) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addCircleMarkers(radius = 1, clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(radius = 1, clusterOptions = markerClusterOptions(),
+                   popup = paste0("Crime Type: ", crime_2019$parent_incident_type,
+                                  "<br>",
+                                  "Date & Time: ", crime_2019$incident_datetime),
+                   popupOptions = popupOptions(closeButton=FALSE, closeOnClick=TRUE)) %>%
   addPolygons(data = Buffalo_CBG$geometry, color = "black", weight = 0.5)
   
 ```
