@@ -1,5 +1,5 @@
 ---
-title: "Stay safe!<br>Mapping the crime events in Buffalo, NY (2010-2020)"
+title: "Stay safe!<br>Visualizing the crime incidents in Buffalo (2010-2020)"
 author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
