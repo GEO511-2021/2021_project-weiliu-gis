@@ -4,7 +4,7 @@ author: "Wei Liu"
 subtitle: "Explore the spatiotemporal pattern of crime events in the City of Buffalo, New York, USA"
 ---
 
-# Introduction
+# 1 Introduction
 
 Crime, as what it always appears to be, is the negative power in our society that tends to trigger multiple problems. With the increasing demand for higher quality of life in the modern world, the general public attaches more attention to the safety of the living environment as one of the basic factors considered. There has been considerable effort extended to exploring and understanding the pattern of various types of crimes. There exists a sub-field, namely, geographic profiling, which is the marginal subject of criminology and geography, looking into the crime events with both the theoretical basics from criminology and spatial methodologies from geography, with the ultimate goal of promoting suggestions for reducing crime rates and maintaining social safety.  
   
@@ -16,9 +16,9 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 <br>
 
-# Data and methods
+# 2 Data and methods
 
-## Data
+## 2.1 Data
 
 1. Crime incidents
 
@@ -34,15 +34,15 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 <br>
 
-## Methods
+## 2.2 Methods
 
 The major method utilized in this project is visualization. And the visualization consists of two main parts. Firstly, we create static and dynamic plots to show the changing behaviors of crime incidents from 2010 to 2020. Secondly, we create an interactive map that depicts the spatial distribution of the crime incidents in Buffalo, NY. Finally, using data in the year of 2019 as an example, we reveal the probable relationship between crime incidents and sociodemographic attributes by calculating the correlation coefficients.
 
 <br>
 
-# Process
+# 3 Process
 
-## Load needed packages
+## 3.1 Load needed packages
 
 ```{r, message=FALSE, results='hide'}
 # needed packages
@@ -65,9 +65,9 @@ library(ggcorrplot)
 
 <br>
 
-## Data collection and preprocessing
+## 3.2 Data collection and preprocessing
 
-### Census Block Group 2010
+### 3.2.1 Census Block Group 2010
 
 We read the file of Census Block Group into the environment.
 
@@ -79,7 +79,7 @@ Buffalo_CBG <- dplyr::select(Buffalo_CBG, geoid10)
 
 <br>
 
-### Crime incidents
+### 3.2.2 Crime incidents
 
 Firstly, we download the crime incidents data from Buffalo Open Data Portal.
   
@@ -121,7 +121,7 @@ crime_pre <- dplyr::select(crime_pre,
 
 <br>
 
-### Sociodemographic data
+### 3.2.3 Sociodemographic data
 
 We use the tidycensus API to access U.S. Census data. The variables that we use in this project are population, black population, white population, population aged 65 and over, median household income, and population with Bachelor's degree.
 
@@ -179,11 +179,11 @@ Buffalo_demo <- Buffalo_demo %>%
 
 <br>
 
-# Results
+# 4 Results
 
-## The Distribution of Crimes in Space and Time
+## 4.1 The Distribution of Crimes in Space and Time
 
-### Total Number of Crime Incidents (2010-2020)
+### 4.1.1 Total Number of Crime Incidents (2010-2020)
 
 In this part, we create a image to show the change in the total number of crime incidents from 2010 to 2020 and also use distinct colors to mark out different type of crimes.
 
@@ -212,7 +212,7 @@ From the plot above, obviously, it demonstrates that the number of crime inciden
 
 <br>
 
-### Number of Crime Incidents by Hour
+### 4.1.2 Number of Crime Incidents by Hour
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
@@ -235,11 +235,11 @@ ggplot() +
   theme_minimal()
 ```
 
-Apparently, as the plot above shows, most crimes are committed in the middle of the night。
+Apparently, as the plot above shows, most crimes are committed in the middle of the night.
 
 <br>
 
-### Change in the ratios of the types of crime incidents (2010-2020)
+### 4.1.3 Change in the ratios of the types of crime incidents (2010-2020)
 
 In this part, we explore more about the change in the types of the committed crimes over the 10-year period.
 
@@ -262,11 +262,11 @@ anim <- ggplot(crime_by_year_type_ratio, aes(parent_incident_type, percentage, f
 animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
-From the dynamic plot, we notice that the three leading types of crime are theft, assault, and breaking&entering. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and breaking&entering.
+From the dynamic plot, we notice the three leading types of crime are theft, assault, and breaking&entering. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and breaking&entering.
 
 <br>
 
-### Map of the Spatial distribution of the crime incident points (2019)
+### 4.1.4 Map of the Spatial distribution of the crime incident points (2019)
 
 In this part, we create an interactive map showing the spatial distribution of crime incidents in 2019.
 
@@ -298,7 +298,7 @@ Intuitively, from the map, we are aware that most crime incidents happen within 
 
 <br>
 
-### Map of the Spatial distribution of the crime incidents by Census Block Group (2019)
+### 4.1.5 Map of the Spatial distribution of the crime incidents by Census Block Group (2019)
 
 In this part, we count the number of crime incidents in each Census Block Group and display the map.
 
@@ -334,7 +334,7 @@ leaflet() %>%
 
 <br>
 
-## Correlation Between Crime Incidents and Sociodemographic Characteristics
+## 4.2 Correlation Between Crime Incidents and Sociodemographic Characteristics
 
 In this part, we explore the correlation between recorded crime incidents and sociodemographic characteristics in the same areas, taking the year of 2019 as an example.
 
@@ -348,18 +348,40 @@ Buffalo_demo_crime <- Buffalo_demo %>%
   drop_na()
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.align='center'}
 # Calculate the correlation matrix
-corr <- cor(Buffalo_demo_crime)
+corr <- cor(Buffalo_demo_crime, method="spearman")
 # Calculate the correlation p-values
 pmat <- cor_pmat(Buffalo_demo_crime)
 
 # Plot the correlation matrix
 ggcorrplot(corr,
-           method = "circle",
            hc.order = TRUE,
            type = "lower",
-           outline.color = "gray50",
-           ggtheme = ggplot2::theme_minimal,
-           p.mat = pmat)
+           outline.color = "white",
+           colors = c("#6D9EC1", "white", "#E46726"),
+           ggtheme = ggplot2::theme_gray,
+           p.mat = pmat,
+           legend.title = "Spearman\nCorrelation")
 ```
+
+The plot of Spearman's correlation matrix illustrate the potential relationship between crimes and sociodemographic attributes. We find out that the number of crimes is positively correlated with the percentage of black population in a CBG, while the correlations with median household income, percentage of white population, and percentage of reported bachelor's degree are somewhat negative. There exists little correlation between crimes and total population as well as the elderly population.
+
+<br>
+
+# 5 Conclusion
+
+This project explores the pattern of recorded crime incidents in both time and space dimensions, and also evaluate the correlation between crimes and sociodemographic attributes. The total number of crime incidents has been decreasing from 2010 to 2020. Most crimes are committed in the middle of the night. The overall fluctuation of the ratios of different types of crimes throughout the 10-year time period is not drastic. Spatially, most crime incidents happen within or near the central part of Buffalo. The number of crimes in each CBG is positively correlated with the percentage of black population within a CBG, while the correlations with median household income, percentage of white population, and percentage of reported bachelor's degree are somewhat negative. There exists little correlation between crimes and total population as well as the elderly population.
+
+<br>
+
+# 6 References
+
+1. Aksoy, E., 2017. Geography of Crime and Its Relation to Location: The City of Balıkesir (Turkey). IOP Conf. Ser.: Mater. Sci. Eng. 245, 072012. https://doi.org/10.1088/1757-899X/245/7/072012
+2. Bringing Geography to the Practice of Analyzing Crime Through Technology [WWW Document], n.d. . Office of Justice Programs. URL https://www.ojp.gov/library/publications/bringing-geography-practice-analyzing-crime-through-technology (accessed 11.29.21).
+3. Butorac, K., 2017. Geography of Crime and Geographic Information Systems. JFSCI 2. https://doi.org/10.19080/JFSCI.2017.02.555591
+4. Geographic profiling, 2021. . Wikipedia.
+5. Kaplan, J., n.d. 12 Exploratory data analysis | Crime by the Numbers: A Criminologist’s Guide to R.
+6. LeBeau, J.L., Leitner, M., 2011. Introduction: Progress in Research on the Geography of Crime. The Professional Geographer 63, 161–173. https://doi.org/10.1080/00330124.2010.547147
+7. Owusu, G., Frimpong, L., 2020. Crime Geography.
+8. Understanding Crime: Analyzing the Geography of Crime | Esri Press [WWW Document], n.d. URL 1. https://www.esri.com/en-us/esri-press/browse/understanding-crime-analyzing-the-geography-of-crime (accessed 11.29.21).
