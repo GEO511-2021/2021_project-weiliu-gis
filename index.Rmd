@@ -48,14 +48,14 @@ library(tidycensus)
 library(tidyverse)
 library(viridis)
 library(ggrepel)
-library(ggcorrplot)
 library(gganimate)
+library(magick)
 library(sf)
 library(spatialEco)
 library(leaflet)
 library(GISTools)
 library(kableExtra)
-library(magick)
+library(ggcorrplot)
 ```
 
 ## Data collection and preprocessing
@@ -81,8 +81,8 @@ crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.c
 secondly, we preprocess the crime incidents data.
 ```{r, message=FALSE, results='hide'}
 crime_pre <- crime_original %>%
-  # For the column of incident_type_primary, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
-  mutate(incident_type_primary = tolower(incident_type_primary)) %>%
+  # For the column of parent_incident_type, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
+  mutate(parent_incident_type = tolower(parent_incident_type)) %>%
   # the column of incident_datetime has 5 NA, so we fill them with the values in the column of create_at respectively.
   mutate(incident_datetime = ifelse(is.na(incident_datetime), created_at, incident_datetime)) %>%
   # change the column of incident_datetime into a standard date-time format.
@@ -104,6 +104,10 @@ crime_pre <- st_as_sf(crime_pre, coords = c("longitude", "latitude"), crs = st_c
 crime_pre <- point.in.poly(crime_pre, Buffalo_CBG)
 crime_pre <- st_as_sf(crime_pre) %>%
   drop_na(geoid10)
+
+# Only select needed columns
+crime_pre <- dplyr::select(crime_pre,
+                    geoid10, incident_datetime, incident_year, incident_hour, parent_incident_type)
 ```
 
 ### Sociodemographic data
@@ -169,14 +173,16 @@ Buffalo_demo <- Buffalo_demo %>%
 In this part, we create a image to show the change in the total number of crime incidents from 2010 to 2020 and also use distinct colors to mark out different type of crimes.
 
 ```{r, message=FALSE, warning=FALSE, fig.align='center'}
-crime_by_year <- count(crime_pre, incident_year) %>%
+crime_pre_drop_geo <- st_set_geometry(crime_pre, NULL)
+
+crime_by_year <- count(crime_pre_drop_geo, incident_year) %>%
   arrange(incident_year)
 
-crime_by_year_type <- count(crime_pre, incident_year, incident_type_primary) %>%
+crime_by_year_type <- count(crime_pre_drop_geo, incident_year, parent_incident_type) %>%
   arrange(incident_year)
 
 ggplot() +
-  geom_col(data=crime_by_year_type, mapping=aes(incident_year, n, fill=incident_type_primary, group = 1)) +
+  geom_col(data=crime_by_year_type, mapping=aes(incident_year, n, fill=parent_incident_type, group = 1)) +
   geom_line(data=crime_by_year, aes(incident_year, n, group = 1)) +
   geom_point(data=crime_by_year, aes(incident_year, n, group = 1)) +
   geom_text_repel(data=crime_by_year, aes(incident_year, n, group = 1, label=n), size=3, fontface="bold", color="darkred", hjust = 0.65, vjust = 0.6) +
@@ -187,21 +193,21 @@ ggplot() +
   scale_fill_viridis(discrete=TRUE, name="Incident Type")
 ```
 
-From the plot above, obviously, it deomonstrates that the number of crime incidents has been decreasing through the period of time.
+From the plot above, obviously, it demonstrates that the number of crime incidents has been decreasing through the period of time.
 
 ## Number of Crime Incidents by Hour
 
 In this part, we attempt to figure out whether there exists a specific period of time that witnesses most crime incidents in a day.
 
 ```{r, message=FALSE, warning=FALSE, fig.align='center'}
-crime_by_hour <- count(crime_pre, incident_hour) %>%
+crime_by_hour <- count(crime_pre_drop_geo, incident_hour) %>%
   arrange(incident_hour)
 
-crime_by_hour_type <- count(crime_pre, incident_hour, incident_type_primary) %>%
+crime_by_hour_type <- count(crime_pre_drop_geo, incident_hour, parent_incident_type) %>%
   arrange(incident_hour)
 
 ggplot() +
-  geom_col(data=crime_by_hour_type, mapping=aes(incident_hour, n, fill=incident_type_primary, group = 1)) +
+  geom_col(data=crime_by_hour_type, mapping=aes(incident_hour, n, fill=parent_incident_type, group = 1)) +
   coord_polar(theta="x") +
   geom_text_repel(data=crime_by_hour, aes(incident_hour, n, group = 1, label=n), size=2, fontface="bold", color="darkred") +
   labs(title = "Number of Crime Incidents by Hour",
@@ -225,7 +231,7 @@ crime_by_year_type_ratio <- crime_by_year_type %>%
   mutate(percentage=n/sum(n))
 
 # Secondly, we do plotting.
-anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, fill=incident_type_primary)) +
+anim <- ggplot(crime_by_year_type_ratio, aes(parent_incident_type, percentage, fill=parent_incident_type)) +
   geom_col() +
   coord_polar(theta="x") +
   theme_minimal() +
@@ -237,7 +243,7 @@ anim <- ggplot(crime_by_year_type_ratio, aes(incident_type_primary, percentage, 
 animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
-From the dynamic plot, we notice that the three leading types of crime are larceny/theft, burglary, and assault. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and burglary.
+From the dynamic plot, we notice that the three leading types of crime are theft, assault, and breaking&entering. The overall fluctuation of the ratios throughout the 10-year time period is not drastic. However, there is still some shift in terms of two types of crime, namely, assault and breaking&entering.
 
 ## Spatial distribution of the crime incidents in 2019
 
@@ -249,10 +255,9 @@ crime_2019 <- crime_pre %>%
 
 leaflet() %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addCircleMarkers(lng = crime_2019$longitude, 
-                   lat = crime_2019$latitude,
+  addCircleMarkers(lng = ~geometry.longitude, lat = ~geometry.latitude,
                    radius = 2,
-                   popup = paste0("Crime Type: ", crime_2019$incident_type_primary,"<br>",
+                   popup = paste0("Crime Type: ", crime_2019$parent_incident_type,"<br>",
                                   "Address: ", crime_2019$address),
                    clusterOptions = markerClusterOptions())
 ```
