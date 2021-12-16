@@ -24,15 +24,15 @@ In this project, we want to reveal and understand the spatiotemporal distributio
 
 ## 2.1 Data
 
-1. Crime incidents
+**1. Crime incidents**
 
 &nbsp; &nbsp; &nbsp; &nbsp; The csv file of crime incidents is in the public domain, available from the website of Open Data Portal of the City of Buffalo.
 
-2. Census Block Groups (CBGs) 2010 of the City of Buffalo
+**2. Census Block Groups (CBGs) 2010 of the City of Buffalo**
 
 &nbsp; &nbsp; &nbsp; &nbsp; The Census Block Groups 2010 data is available from Buffalo Open Data Portal. CBGs are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people, and are used to present data and control block numbering. We perform our explorations at the CBG level in this project.
 
-3. Sociodemographic data
+**3. Sociodemographic data**
 
 &nbsp; &nbsp; &nbsp; &nbsp; The sociodemographic data comes from the API of tidycensus.
 
