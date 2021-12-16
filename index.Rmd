@@ -249,13 +249,15 @@ From the dynamic plot, we notice that the three leading types of crime are theft
 
 
 
-```{r, message=FALSE, fig.align='center'}
+```{r, message=FALSE, warning=FALSE, results='hide'}
 crime_2019 <- crime_pre %>%
   filter(incident_year=="2019")
 
 st_transform(crime_2019, '+proj=longlat +datum=WGS84')
 st_transform(Buffalo_CBG, '+proj=longlat +datum=WGS84')
+```
 
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 leaflet(crime_2019) %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addCircleMarkers(radius = 1, clusterOptions = markerClusterOptions(),
