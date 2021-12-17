@@ -257,6 +257,7 @@ crime_by_year_type_ratio <- crime_by_year_type %>%
 anim <- ggplot(crime_by_year_type_ratio, aes(parent_incident_type, percentage, fill=parent_incident_type)) +
   geom_col() +
   coord_polar(theta="x") +
+  scale_y_sqrt() +
   theme_minimal() +
   labs(x = "Incident Type", y = "Percentage") +
   theme(plot.title = element_text(hjust = 0.5)) +
