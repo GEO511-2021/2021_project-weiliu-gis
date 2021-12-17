@@ -50,7 +50,7 @@ The major method utilized in this project is visualization. And the visualizatio
 
 ```{r, message=FALSE, results='hide'}
 # needed packages
-library(readr)
+library(knitr)
 library(chron)
 library(lubridate)
 library(tidycensus)
@@ -63,9 +63,13 @@ library(ggcorrplot)
 library(sf)
 library(spatialEco)
 library(leaflet)
-library(kableExtra)
 library(ggcorrplot)
 ```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 
 <br>
 
