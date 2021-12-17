@@ -111,7 +111,8 @@ crime_pre <- crime_original %>%
   filter(latitude!=0 & longitude!=0)
 
 # Convert the csv into an sf object
-crime_pre <- st_as_sf(crime_pre, coords = c("longitude", "latitude"), crs = st_crs(Buffalo_CBG))
+crime_pre <- st_as_sf(crime_pre, coords = c("longitude", "latitude"),
+                      crs = st_crs(Buffalo_CBG))
 
 # Overlay the crime incident points with Buffalo polygons in order to remove those points outside Buffalo (maybe they made some mistakes when recording the lat and long.)
 crime_pre <- point.in.poly(crime_pre, Buffalo_CBG)
@@ -130,29 +131,33 @@ crime_pre <- dplyr::select(crime_pre,
 We use the tidycensus API to access U.S. Census data. The variables that we use in this project are population, black population, white population, population aged 65 and over, median household income, and population with Bachelor's degree.
 
 ```{r, include=FALSE}
-# census_api_key("a718a73636c5abd5f89dfb04bad709219e4468d2", install=TRUE, overwrite=TRUE)
-
-census_api_key(Sys.getenv("CENSUS_API_KEY"),install=TRUE, overwrite = TRUE)
+census_api_key(Sys.getenv("CENSUS_API_KEY"), install=TRUE, overwrite = TRUE)
 readRenviron("~/.Renviron")
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
-population <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B01003_001", year=2019)
+population <- get_acs(geography = "block group", state="NY", county="Erie", 
+                      variables = "B01003_001", year=2019)
 population = rename(population, c("population"= "estimate"))
 
-black <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B02001_003", year=2019)
+black <- get_acs(geography = "block group", state="NY", county="Erie", 
+                 variables = "B02001_003", year=2019)
 black = rename(black, c("black"= "estimate"))
 
-white <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B02001_002", year=2019)
+white <- get_acs(geography = "block group", state="NY", county="Erie", 
+                 variables = "B02001_002", year=2019)
 white = rename(white, c("white"= "estimate"))
 
-aged <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B29001_005", year=2019)
+aged <- get_acs(geography = "block group", state="NY", county="Erie", 
+                variables = "B29001_005", year=2019)
 aged = rename(aged, c("aged"= "estimate"))
 
-income <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B19013_001", year=2019)
+income <- get_acs(geography = "block group", state="NY", county="Erie", 
+                  variables = "B19013_001", year=2019)
 income = rename(income, c("income"= "estimate"))
 
-bachelor <- get_acs(geography = "block group", state="NY", county="Erie", variables = "B15012_001", year=2019)
+bachelor <- get_acs(geography = "block group", state="NY", county="Erie", 
+                    variables = "B15012_001", year=2019)
 bachelor = rename(bachelor, c("bachelor"= "estimate"))
 ```
 Then, we organize the sociodemographic data together with the CBG data.
@@ -168,7 +173,10 @@ Buffalo_demo <- Buffalo_CBG %>%
   left_join(bachelor, by = c("geoid10" = "GEOID"))
 
 # Only select useful columns
-Buffalo_demo <- dplyr::select(Buffalo_demo, geoid10, population, black, white, aged, income, bachelor)
+Buffalo_demo <- dplyr::select(Buffalo_demo, geoid10, 
+                              population, black, 
+                              white, aged, 
+                              income, bachelor)
 ```
 
 And to remove the effect of population disparity, we normalize some of our variables by population.
@@ -201,7 +209,10 @@ crime_by_year_type <- count(crime_pre_drop_geo, incident_year, parent_incident_t
   arrange(incident_year)
 
 ggplot() +
-  geom_col(data=crime_by_year_type, mapping=aes(incident_year, n, fill=parent_incident_type, group = 1)) +
+  geom_col(data=crime_by_year_type, 
+           mapping=aes(incident_year, n, 
+                       fill=parent_incident_type, 
+                       group = 1)) +
   geom_line(data=crime_by_year, aes(incident_year, n, group = 1)) +
   geom_point(data=crime_by_year, aes(incident_year, n, group = 1)) +
   geom_text_repel(data=crime_by_year, aes(incident_year, n, group = 1, label=n), size=3, fontface="bold", color="darkred", hjust = 0.65, vjust = 0.6) +
@@ -228,9 +239,15 @@ crime_by_hour_type <- count(crime_pre_drop_geo, incident_hour, parent_incident_t
   arrange(incident_hour)
 
 ggplot() +
-  geom_col(data=crime_by_hour_type, mapping=aes(incident_hour, n, fill=parent_incident_type, group = 1)) +
+  geom_col(data=crime_by_hour_type, 
+           mapping=aes(incident_hour, n, 
+                       fill=parent_incident_type, 
+                       group = 1)) +
   coord_polar(theta="x") +
-  geom_text_repel(data=crime_by_hour, aes(incident_hour, n, group = 1, label=n), size=2, fontface="bold", color="darkred") +
+  geom_text_repel(data=crime_by_hour, 
+                  aes(incident_hour, n, group = 1, label=n), 
+                  size=2, fontface="bold", 
+                  color="darkred") +
   labs(title = "Number of Crime Incidents by Hour",
        x = "Hour of a day",
        y = "Total Number of Incidents") +
@@ -261,9 +278,12 @@ anim <- ggplot(crime_by_year_type_ratio, aes(parent_incident_type, percentage, f
   theme_minimal() +
   labs(x = "Incident Type", y = "Percentage") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  transition_states(as.numeric(incident_year), transition_length=5, state_length=1) +
+  transition_states(as.numeric(incident_year), 
+                    transition_length=5, 
+                    state_length=1) +
   ease_aes('linear') +
-  ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', subtitle = 'Year: {closest_state}')
+  ggtitle('Change in the Ratios of the Types of Crime Incidents (2010-2020)', 
+          subtitle = 'Year: {closest_state}')
 animate(anim, renderer = magick_renderer(loop=TRUE))
 ```
 
@@ -330,8 +350,7 @@ leaflet() %>%
               popup = paste0("Number of Incidents: ", crime_2019_count_by_CBG$counts),
               fillColor = pal(crime_2019_count_by_CBG$counts),
               fillOpacity = 0.8,
-              highlightOptions = highlightOptions(color = "black",
-                                                  weight = 3)) %>%
+              highlightOptions = highlightOptions(color = "black", weight = 3)) %>%
   addLegend(pal = pal, 
             values = crime_2019_count_by_CBG$counts,
             opacity = 1)
@@ -348,7 +367,9 @@ In this part, we explore the correlation between recorded crime incidents and so
 Buffalo_demo_crime <- Buffalo_demo %>%
   st_set_geometry(NULL) %>%
   inner_join(crime_2019_count_by_CBG, by='geoid10') %>%
-  dplyr::select(black_r, white_r, aged_r, bachelor_r, income, population, counts) %>%
+  dplyr::select(black_r, white_r, aged_r, 
+                bachelor_r, income, population, 
+                counts) %>%
   # There are some missing values in the data frame
   drop_na()
 ```
