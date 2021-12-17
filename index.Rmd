@@ -88,7 +88,8 @@ Buffalo_CBG <- dplyr::select(Buffalo_CBG, geoid10)
 Firstly, we download the crime incidents data from Buffalo Open Data Portal.
   
 ```{r, message=FALSE, warning=FALSE, results='hide'}
-crime_original = read_csv("https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
+crime_original = read_csv(
+  "https://data.buffalony.gov/api/views/d6g9-xbgu/rows.csv?accessType=DOWNLOAD")
 ```
 
 secondly, we clean and preprocess the original crime incidents data.
@@ -97,7 +98,8 @@ crime_pre <- crime_original %>%
   # For the column of parent_incident_type, change all letters into lower cases (e.g., Assault and ASSAULT are actually the same type of crime.)
   mutate(parent_incident_type = tolower(parent_incident_type)) %>%
   # the column of incident_datetime has 5 NA, so we fill them with the values in the column of create_at respectively.
-  mutate(incident_datetime = ifelse(is.na(incident_datetime), created_at, incident_datetime)) %>%
+  mutate(incident_datetime = ifelse(is.na(incident_datetime), 
+                                    created_at, incident_datetime)) %>%
   # change the column of incident_datetime into a standard date-time format.
   mutate(incident_datetime = parse_date_time(incident_datetime, '%m/%d/%Y %I:%M:%S %p')) %>%
   # extract year and hour from the column of incident_datetime
@@ -121,7 +123,8 @@ crime_pre <- st_as_sf(crime_pre) %>%
 
 # Only select needed columns
 crime_pre <- dplyr::select(crime_pre,
-                           case_number, geoid10, incident_datetime, incident_year, incident_hour, parent_incident_type)
+                           case_number, geoid10, incident_datetime, incident_year,
+                           incident_hour, parent_incident_type)
 ```
 
 <br>
@@ -215,7 +218,9 @@ ggplot() +
                        group = 1)) +
   geom_line(data=crime_by_year, aes(incident_year, n, group = 1)) +
   geom_point(data=crime_by_year, aes(incident_year, n, group = 1)) +
-  geom_text_repel(data=crime_by_year, aes(incident_year, n, group = 1, label=n), size=3, fontface="bold", color="darkred", hjust = 0.65, vjust = 0.6) +
+  geom_text_repel(data=crime_by_year, aes(incident_year, n, group = 1, label=n), 
+                  size=3, fontface="bold", color="darkred", 
+                  hjust = 0.65, vjust = 0.6) +
   labs(title = "Total Number of Crime Incidents (2010-2020)",
        x = "Year",
        y = "Total Number of Incidents") +
@@ -271,7 +276,8 @@ crime_by_year_type_ratio <- crime_by_year_type %>%
   mutate(percentage=n/sum(n))
 
 # Secondly, we do plotting.
-anim <- ggplot(crime_by_year_type_ratio, aes(parent_incident_type, percentage, fill=parent_incident_type)) +
+anim <- ggplot(crime_by_year_type_ratio,
+               aes(parent_incident_type, percentage, fill=parent_incident_type)) +
   geom_col() +
   coord_polar(theta="x") +
   scale_y_sqrt() +
@@ -336,11 +342,13 @@ crime_2019_count_by_CBG <- crime_2019 %>%
   # Join the counts to Buffalo_CBG
   right_join(Buffalo_CBG, by = "geoid10")
 
-crime_2019_count_by_CBG <- st_set_geometry(crime_2019_count_by_CBG, crime_2019_count_by_CBG$geometry)
+crime_2019_count_by_CBG <- 
+  st_set_geometry(crime_2019_count_by_CBG, crime_2019_count_by_CBG$geometry)
 ```
 
 ```{r, message=FALSE, fig.align='center'}
-pal <- colorNumeric(c('#edf8fb','#b3cde3','#8c96c6','#8856a7','#810f7c'), crime_2019_count_by_CBG$counts)
+pal <- colorNumeric(c('#edf8fb','#b3cde3','#8c96c6','#8856a7','#810f7c'), 
+                    crime_2019_count_by_CBG$counts)
 
 leaflet() %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
